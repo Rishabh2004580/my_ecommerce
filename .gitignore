@@ -1,0 +1,22 @@
+# Environment / secrets
+.env
+.env.*
+
+# Logs
+*.log
+
+# Uploaded product images
+assets/images/products/*
+!assets/images/products/.gitkeep
+
+# Temporary files
+*.tmp
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code local settings
+.vscode/*
+!.vscode/extensions.json
