@@ -9,7 +9,7 @@ function admin_header(string $title, string $active = 'dashboard'): void
         'products' => ['Products', 'admin/products.php'],
         'categories' => ['Categories', 'admin/categories.php'],
         'orders' => ['Orders', 'admin/orders.php'],
-        'customers' => ['Customers', 'admin/customers.php'],
+        'users' => ['Users', 'admin/users.php'],
     ];
     ?>
     <!doctype html>
@@ -26,11 +26,11 @@ function admin_header(string $title, string $active = 'dashboard'): void
             <button class="admin-menu-toggle" type="button" aria-label="Toggle admin menu" aria-expanded="false" data-admin-menu-toggle>☰</button>
             <a class="admin-brand" href="<?= e(site_url('admin/index.php')); ?>">
                 <span class="admin-brand-mark">S</span>
-                <span><strong>ShopStore</strong><small>Admin Panel</small></span>
+                <span><strong>Maison Gift Co.</strong><small>Admin Panel</small></span>
             </a>
             <div class="admin-user">
-                <span class="admin-avatar">A</span>
-                <span>Administrator</span>
+                <span class="admin-avatar"><?= e(strtoupper(substr((string) ($_SESSION['admin_name'] ?? 'A'), 0, 1))); ?></span>
+                <span><?= e((string) ($_SESSION['admin_name'] ?? 'Administrator')); ?></span>
                 <a href="<?= e(site_url('admin/logout.php')); ?>">Logout</a>
             </div>
         </header>

@@ -45,6 +45,16 @@ body.admin-body { margin: 0; color: var(--admin-navy); background: var(--admin-b
 .admin-card-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.2rem; border-bottom: 1px solid var(--admin-border); }
 .admin-card-head h2 { margin: 0; font-size: 1rem; }
 .admin-card-body { padding: 1.2rem; }
+.admin-sales-card { display: grid; gap: .35rem; margin: 1.2rem 0; padding: 1.2rem; }
+.admin-sales-card strong { font-size: 2rem; }
+.admin-filter-form { display: flex; flex-wrap: wrap; gap: .65rem; }
+.admin-filter-form input, .admin-filter-form select { min-width: 180px; flex: 1; padding: .7rem .75rem; border: 1px solid #d9e0ea; border-radius: 8px; font: inherit; background: #fff; }
+.admin-pagination { display: flex; gap: .35rem; margin-top: 1rem; }
+.admin-pagination a { padding: .45rem .7rem; border: 1px solid var(--admin-border); border-radius: 6px; color: var(--admin-navy); text-decoration: none; }
+.admin-pagination a.is-active { color: #fff; background: var(--admin-blue); border-color: var(--admin-blue); }
+.admin-detail-list { display: grid; gap: .85rem; }
+.admin-detail-list p { margin: 0; white-space: pre-line; }
+.admin-detail-list strong { display: block; margin-bottom: .2rem; color: var(--admin-muted); font-size: .75rem; text-transform: uppercase; }
 .admin-list { display: grid; gap: .8rem; }
 .admin-list-row { display: flex; align-items: center; justify-content: space-between; gap: .7rem; padding-bottom: .8rem; border-bottom: 1px solid #f0f2f6; }
 .admin-list-row:last-child { border-bottom: 0; padding-bottom: 0; }
@@ -55,6 +65,8 @@ body.admin-body { margin: 0; color: var(--admin-navy); background: var(--admin-b
 .admin-badge.processing { color: #1d4ed8; background: #e7efff; }
 .admin-badge.shipped, .admin-badge.completed { color: #137333; background: #e5f7eb; }
 .admin-badge.cancelled { color: #b42318; background: #feeceb; }
+.admin-badge.active { color: #137333; background: #e5f7eb; }
+.admin-badge.inactive { color: #667085; background: #eef2f7; }
 .admin-quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
 .admin-quick-actions a { padding: .8rem; border: 1px solid var(--admin-border); border-radius: 8px; color: var(--admin-navy); text-decoration: none; font-weight: 700; font-size: .85rem; }
 .admin-quick-actions a:hover { border-color: #b5cdfd; color: var(--admin-blue); }

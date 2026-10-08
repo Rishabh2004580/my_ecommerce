@@ -13,7 +13,7 @@ function require_admin_auth(): PDO
     $pdo = get_db_connection();
 
     if ($adminId === false || $adminId === null || $pdo === null) {
-        header('Location: /ecommerce/admin/login.php');
+        redirect('admin/login.php');
         exit;
     }
 
@@ -23,8 +23,24 @@ function require_admin_auth(): PDO
 
     if (!$admin || $admin['role'] !== 'admin') {
         unset($_SESSION['admin_id'], $_SESSION['admin_name'], $_SESSION['admin_email'], $_SESSION['admin_role']);
-        header('Location: /ecommerce/admin/login.php');
+        redirect('admin/login.php');
         exit;
+    }
+
+    function admin_csrf_token(): string
+    {
+        if (empty($_SESSION['admin_csrf'])) {
+            $_SESSION['admin_csrf'] = bin2hex(random_bytes(32));
+        }
+
+        return $_SESSION['admin_csrf'];
+    }
+
+    function admin_verify_csrf(): bool
+    {
+        $token = (string) ($_POST['csrf_token'] ?? '');
+        return $token !== '' && !empty($_SESSION['admin_csrf'])
+            && hash_equals($_SESSION['admin_csrf'], $token);
     }
 
     $_SESSION['admin_name'] = $admin['name'];
@@ -58,7 +74,7 @@ function product_upload(string $field, ?string $currentImage = null): array
         return ['path' => $currentImage, 'error' => 'The image upload failed.', 'uploaded' => false];
     }
 
-    if ($file['size'] > 5 * 1024 * 1024 || !is_uploaded_file($file['tmp_name'])) {
+    if (!is_uploaded_file($file['tmp_name']) || $file['size'] <= 0 || $file['size'] > 5 * 1024 * 1024) {
         return ['path' => $currentImage, 'error' => 'Images must be valid uploads no larger than 5 MB.', 'uploaded' => false];
     }
 
@@ -84,6 +100,7 @@ function product_upload(string $field, ?string $currentImage = null): array
     }
 
     if (!move_uploaded_file($file['tmp_name'], $directory . DIRECTORY_SEPARATOR . $filename)) {
+        error_log('Admin product image upload failed for temporary file.');
         return ['path' => $currentImage, 'error' => 'The image could not be saved.', 'uploaded' => false];
     }
 

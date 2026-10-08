@@ -2,14 +2,10 @@
 require_once __DIR__ . '/../includes/admin-auth.php';
 require_once __DIR__ . '/../includes/admin-layout.php';
 $pdo = require_admin_auth();
-$pageTitle = 'Add Product | ShopStore';
+$pageTitle = 'Add Product | Maison Gift Co.';
 $errors = [];
 $categories = $pdo->query('SELECT id, name FROM categories ORDER BY name')->fetchAll();
-$values = ['name' => '', 'category_id' => '', 'occasion' => '', 'description' => '', 'price' => '', 'mrp' => '', 'discount' => '', 'stock' => '', 'status' => 'active'];
-
-if (empty($_SESSION['admin_csrf'])) {
-    $_SESSION['admin_csrf'] = bin2hex(random_bytes(32));
-}
+$values = ['name' => '', 'category_id' => '', 'occasion' => '', 'description' => '', 'price' => '', 'mrp' => '', 'discount' => '', 'stock' => '', 'status' => 'active', 'image' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $values['name'] = trim((string) ($_POST['name'] ?? ''));
@@ -22,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $values['stock'] = trim((string) ($_POST['stock'] ?? ''));
     $values['status'] = (string) ($_POST['status'] ?? '');
 
-    if (!hash_equals($_SESSION['admin_csrf'], (string) ($_POST['csrf_token'] ?? ''))) {
+    if (!admin_verify_csrf()) {
         $errors[] = 'The form expired. Please try again.';
     }
     if ($values['name'] === '' || strlen($values['name']) > 180) {
@@ -49,9 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'The selected category does not exist.';
     }
 
-    $upload = product_upload('image');
-    if ($upload['error'] !== null) {
-        $errors[] = $upload['error'];
+    if (!$errors) {
+        $upload = product_upload('image');
+        if ($upload['error'] !== null) {
+            $errors[] = $upload['error'];
+        }
     }
 
     if (!$errors) {

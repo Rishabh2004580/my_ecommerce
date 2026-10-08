@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../includes/admin-auth.php';
 require_once __DIR__ . '/../includes/admin-layout.php';
 $pdo = require_admin_auth();
-$pageTitle = 'Edit Product | ShopStore';
+$pageTitle = 'Edit Product | Maison Gift Co.';
 $errors = [];
 $productId = filter_var($_GET['id'] ?? $_POST['id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 $product = null;
@@ -14,7 +14,7 @@ if ($productId !== false && $productId !== null) {
 }
 if (!$product) {
     http_response_code(404);
-    $pageTitle = 'Product Not Found | ShopStore';
+    $pageTitle = 'Product Not Found | Maison Gift Co.';
     admin_header($pageTitle, 'products');
     echo '<div class="admin-card admin-card-body"><h1>Product not found</h1><a class="admin-btn admin-btn-primary" href="' . e(site_url('admin/products.php')) . '">Back to products</a></div>';
     admin_footer();
@@ -23,10 +23,6 @@ if (!$product) {
 
 $categories = $pdo->query('SELECT id, name FROM categories ORDER BY name')->fetchAll();
 $values = $product;
-if (empty($_SESSION['admin_csrf'])) {
-    $_SESSION['admin_csrf'] = bin2hex(random_bytes(32));
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $values['name'] = trim((string) ($_POST['name'] ?? ''));
     $values['category_id'] = trim((string) ($_POST['category_id'] ?? ''));
@@ -37,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $values['discount'] = trim((string) ($_POST['discount'] ?? ''));
     $values['stock'] = trim((string) ($_POST['stock'] ?? ''));
     $values['status'] = (string) ($_POST['status'] ?? '');
-    if (!hash_equals($_SESSION['admin_csrf'], (string) ($_POST['csrf_token'] ?? ''))) $errors[] = 'The form expired. Please try again.';
+    if (!admin_verify_csrf()) $errors[] = 'The form expired. Please try again.';
     if ($values['name'] === '' || strlen($values['name']) > 180) $errors[] = 'Product name is required and must be 180 characters or fewer.';
     if (!ctype_digit($values['category_id'])) $errors[] = 'Please select a valid category.';
     if (!is_numeric($values['price']) || (float) $values['price'] < 0 || (float) $values['price'] > 99999999.99) $errors[] = 'Enter a valid non-negative price.';
@@ -48,8 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categoryStmt = $pdo->prepare('SELECT id FROM categories WHERE id = :id');
     $categoryStmt->execute(['id' => (int) $values['category_id']]);
     if (!$categoryStmt->fetchColumn()) $errors[] = 'The selected category does not exist.';
-    $upload = product_upload('image', $product['image']);
-    if ($upload['error'] !== null) $errors[] = $upload['error'];
+    if (!$errors) {
+        $upload = product_upload('image', $product['image']);
+        if ($upload['error'] !== null) $errors[] = $upload['error'];
+    }
 
     if (!$errors) {
         $stmt = $pdo->prepare(

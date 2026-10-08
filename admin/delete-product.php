@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../includes/admin-auth.php';
 $pdo = require_admin_auth();
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_SESSION['admin_csrf']) || !hash_equals($_SESSION['admin_csrf'], (string) ($_POST['csrf_token'] ?? ''))) {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !admin_verify_csrf()) {
     http_response_code(400);
     admin_set_flash('error', 'Invalid deactivation request.');
     redirect('admin/products.php');

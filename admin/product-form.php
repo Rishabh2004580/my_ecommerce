@@ -1,6 +1,6 @@
 <?php if ($errors): ?><div class="admin-errors"><?php foreach ($errors as $error): ?><p><?= e($error); ?></p><?php endforeach; ?></div><?php endif; ?>
 <form class="admin-card admin-form" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="csrf_token" value="<?= e($_SESSION['admin_csrf']); ?>">
+    <input type="hidden" name="csrf_token" value="<?= e(admin_csrf_token()); ?>">
     <?php if (!empty($product['id'])): ?><input type="hidden" name="id" value="<?= e((string) $product['id']); ?>"><?php endif; ?>
     <div class="admin-card-head"><h2>Product Information</h2></div>
     <div class="admin-card-body">
