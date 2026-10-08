@@ -1,9 +1,3 @@
-CREATE DATABASE IF NOT EXISTS ecommerce
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci;
-
-USE ecommerce;
-
 CREATE TABLE users (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(120) NOT NULL,
