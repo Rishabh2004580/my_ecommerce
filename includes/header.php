@@ -1,12 +1,13 @@
 <?php
 require_once __DIR__ . '/auth.php';
+$siteName = site_name();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= isset($pageTitle) ? e($pageTitle) : 'ShopStore' ?></title>
+    <title><?= isset($pageTitle) ? e($pageTitle) : e($siteName) ?></title>
     <meta name="description" content="Premium chocolates and gifts for every occasion.">
     <?php $styleVersion = is_file(__DIR__ . '/../assets/css/style.css') ? (string) filemtime(__DIR__ . '/../assets/css/style.css') : ''; ?>
     <link rel="stylesheet" href="<?= e(asset_url('css/style.css') . ($styleVersion !== '' ? '?v=' . rawurlencode($styleVersion) : '')); ?>">
@@ -16,7 +17,7 @@ require_once __DIR__ . '/auth.php';
     <header class="site-header">
         <div class="announcement-bar">Free delivery on orders above ₹999</div>
         <div class="container nav-wrap">
-            <a class="brand" href="<?= e(site_url()); ?>"><span>Maison</span> Gift Co.</a>
+            <a class="brand" href="<?= e(site_url()); ?>"><?= e($siteName); ?></a>
             <form class="header-search" method="get" action="<?= e(site_url('products.php')); ?>">
                 <label class="sr-only" for="site-search">Search products</label>
                 <input id="site-search" type="search" name="search" placeholder="Search chocolates, gifts, hampers..." value="<?= e((string) ($_GET['search'] ?? '')); ?>">

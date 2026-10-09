@@ -4,12 +4,16 @@ require_once __DIR__ . '/functions.php';
 
 function admin_header(string $title, string $active = 'dashboard'): void
 {
+    $siteName = site_name();
+    $title = str_replace('Maison Gift Co.', $siteName, $title);
     $items = [
         'dashboard' => ['Dashboard', 'admin/index.php'],
         'products' => ['Products', 'admin/products.php'],
         'categories' => ['Categories', 'admin/categories.php'],
         'orders' => ['Orders', 'admin/orders.php'],
         'users' => ['Users', 'admin/users.php'],
+        'whatsapp-settings' => ['WhatsApp Settings', 'admin/whatsapp-settings.php'],
+        'website-settings' => ['Website Settings', 'admin/website-settings.php'],
     ];
     ?>
     <!doctype html>
@@ -26,7 +30,7 @@ function admin_header(string $title, string $active = 'dashboard'): void
             <button class="admin-menu-toggle" type="button" aria-label="Toggle admin menu" aria-expanded="false" data-admin-menu-toggle>☰</button>
             <a class="admin-brand" href="<?= e(site_url('admin/index.php')); ?>">
                 <span class="admin-brand-mark">S</span>
-                <span><strong>Maison Gift Co.</strong><small>Admin Panel</small></span>
+                <span><strong><?= e($siteName); ?></strong><small>Admin Panel</small></span>
             </a>
             <div class="admin-user">
                 <span class="admin-avatar"><?= e(strtoupper(substr((string) ($_SESSION['admin_name'] ?? 'A'), 0, 1))); ?></span>

@@ -38,6 +38,18 @@ function get_db_connection(): ?PDO
                 $pdo->exec($sql);
             }
         }
+        $pdo->exec(
+            "CREATE TABLE IF NOT EXISTS settings (
+                setting_key VARCHAR(100) NOT NULL,
+                setting_value TEXT NULL,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (setting_key)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+        );
+        $pdo->exec(
+            "INSERT IGNORE INTO settings (setting_key, setting_value)
+             VALUES ('website_name', 'Maison Gift Co.')"
+        );
 
         return $pdo;
     } catch (PDOException $e) {

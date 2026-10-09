@@ -6,7 +6,7 @@ $pdo = get_db_connection();
 $stmt = $pdo->prepare('SELECT id, total_amount, status, created_at FROM orders WHERE user_id = :user_id ORDER BY created_at DESC, id DESC');
 $stmt->execute(['user_id' => (int) $_SESSION['user_id']]);
 $orders = $stmt->fetchAll();
-$pageTitle = 'My Orders | Maison Gift Co.';
+$pageTitle = 'My Orders | ' . site_name();
 require_once __DIR__ . '/includes/header.php';
 ?>
 <section class="page-banner section-spacing"><div class="container"><span class="eyebrow">Your Maison</span><h1>My orders</h1></div></section>

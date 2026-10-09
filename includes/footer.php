@@ -1,9 +1,10 @@
     </main>
 
+    <?php $siteName = site_name(); ?>
     <footer class="site-footer">
         <div class="container footer-grid">
             <div>
-                <h3>Maison Gift Co.</h3>
+                <h3><?= e($siteName); ?></h3>
                 <p>Thoughtful chocolates and premium gifts, beautifully presented for every occasion.</p>
             </div>
             <div>
@@ -26,7 +27,7 @@
         </div>
         <div class="footer-bottom">
             <div class="container">
-                <p>&copy; <?= date('Y'); ?> Maison Gift Co. All rights reserved.</p>
+                <p>&copy; <?= date('Y'); ?> <?= e($siteName); ?>. All rights reserved.</p>
             </div>
         </div>
     </footer>

@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/config/whatsapp.php';
 
-$pageTitle = 'Product Details | Maison Gift Co.';
+$pageTitle = 'Product Details | ' . site_name();
 $product = null;
 $relatedProducts = [];
 $productId = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
@@ -46,7 +47,7 @@ if ($productId !== false && $productId !== null) {
 }
 
 if ($product) {
-    $pageTitle = $product['name'] . ' | Maison Gift Co.';
+    $pageTitle = $product['name'] . ' | ' . site_name();
 } else {
     http_response_code(404);
 }
@@ -93,7 +94,23 @@ require_once __DIR__ . '/includes/header.php';
                         <div class="quantity-control"><label for="quantity">Quantity</label><input id="quantity" type="number" min="1" max="<?= e((string) $stock); ?>" value="1"></div>
                     <?php endif; ?>
                     <div class="purchase-area">
-                        <?php if ($stock > 0): ?><form method="post" action="<?= e(site_url('cart.php')); ?>"><input type="hidden" name="product_id" value="<?= e((string) $product['id']); ?>"><input type="hidden" name="action" value="add"><input type="hidden" name="quantity" value="1"><button class="btn btn-primary" type="submit">Add to Cart</button></form><a class="btn btn-secondary" href="<?= e(site_url('cart.php')); ?>">View Cart</a><?php endif; ?>
+                        <?php if ($stock > 0): ?>
+                            <form method="post" action="<?= e(site_url('cart.php')); ?>"><input type="hidden" name="product_id" value="<?= e((string) $product['id']); ?>"><input type="hidden" name="action" value="add"><input type="hidden" name="quantity" value="1" data-cart-quantity><button class="btn btn-primary" type="submit">Add to Cart</button></form>
+                            <a class="btn btn-secondary" href="<?= e(site_url('cart.php')); ?>">View Cart</a>
+                            <?php
+                            $productMessage = 'Hello ' . site_name() . ", I would like to order:\n"
+                                . 'Product: ' . $product['name'] . "\n"
+                                . 'Product ID: #' . $product['id'] . "\n"
+                                . "Quantity: 1\n"
+                                . 'Price: ' . format_price((float) $product['price']) . "\n"
+                                . 'Subtotal: ' . format_price((float) $product['price']) . "\n"
+                                . 'Product page: ' . absolute_site_url('product.php?id=' . (int) $product['id']);
+                            $productWhatsappUrl = whatsapp_url($pdo, $productMessage);
+                            ?>
+                            <?php if ($productWhatsappUrl !== null): ?>
+                                <a class="btn btn-whatsapp" href="<?= e($productWhatsappUrl); ?>" target="_blank" rel="noopener noreferrer" data-whatsapp-product data-site-name="<?= e(site_name()); ?>" data-product-name="<?= e($product['name']); ?>" data-product-id="<?= e((string) $product['id']); ?>" data-product-price="<?= e(format_price((float) $product['price'])); ?>" data-product-unit-price="<?= e((string) $product['price']); ?>" data-product-url="<?= e(absolute_site_url('product.php?id=' . (int) $product['id'])); ?>"><span class="whatsapp-icon" aria-hidden="true">◉</span> Order on WhatsApp</a>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                     <div class="trust-points"><span>✓ Premium quality</span><span>✓ Gift-ready packaging</span><span>✓ Fast delivery</span></div>
                 </div>

@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/config/database.php';
 
-$pageTitle = 'Gift Collection | Maison Gift Co.';
+$pageTitle = 'Gift Collection | ' . site_name();
 $pdo = get_db_connection();
 $products = [];
 $categories = [];

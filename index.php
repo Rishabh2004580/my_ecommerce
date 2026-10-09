@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/config/database.php';
 
-$pageTitle = 'Maison Gift Co. | Premium Gifts & Chocolates';
+$pageTitle = site_name() . ' | Premium Gifts & Chocolates';
 $pdo = get_db_connection();
 $products = [];
 $categories = [];

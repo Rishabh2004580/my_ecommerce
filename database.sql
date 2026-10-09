@@ -84,6 +84,17 @@ CREATE TABLE order_items (
         ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE settings (
+    setting_key VARCHAR(100) NOT NULL,
+    setting_value TEXT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (setting_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO settings (setting_key, setting_value)
+VALUES ('website_name', 'Maison Gift Co.')
+ON DUPLICATE KEY UPDATE setting_value = setting_value;
+
 INSERT INTO categories (name, slug, description) VALUES
 ('Chocolates', 'chocolates', 'Premium chocolates and handcrafted sweet selections.'),
 ('Gift Hampers', 'gift-hampers', 'Thoughtfully curated gift hampers for meaningful occasions.'),

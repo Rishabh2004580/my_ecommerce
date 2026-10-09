@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/config/database.php';
-$pageTitle = 'Login | Maison Gift Co.';
+$pageTitle = 'Login | ' . site_name();
 $errors = [];
 $email = strtolower(trim((string) ($_POST['email'] ?? '')));
 $pdo = get_db_connection();

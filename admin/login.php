@@ -6,6 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../config/database.php';
+$siteName = site_name();
 
 if (isset($_SESSION['admin_id'], $_SESSION['admin_role']) && $_SESSION['admin_role'] === 'admin') {
     redirect('admin/index.php');
@@ -51,12 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Login | Maison Gift Co.</title>
+    <title>Admin Login | <?= e($siteName); ?></title>
     <link rel="stylesheet" href="<?= e(asset_url('css/admin.css')); ?>">
 </head>
 <body class="admin-login-body">
     <main class="admin-login-card">
-        <div class="admin-login-brand"><span class="admin-brand-mark">M</span><strong>Maison Gift Co.</strong></div>
+        <div class="admin-login-brand"><span class="admin-brand-mark"><?= e(strtoupper(substr($siteName, 0, 1))); ?></span><strong><?= e($siteName); ?></strong></div>
         <span class="admin-eyebrow">Admin Portal</span>
         <h1>Welcome back</h1>
         <p>Sign in to your administrator account.</p>

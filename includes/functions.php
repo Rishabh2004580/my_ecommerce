@@ -24,6 +24,54 @@ function asset_url(string $path = ''): string
     return site_url('assets/' . ltrim($path, '/'));
 }
 
+function site_setting(string $key, string $default = ''): string
+{
+    require_once __DIR__ . '/../config/database.php';
+    $pdo = get_db_connection();
+    if ($pdo === null) {
+        return $default;
+    }
+
+    $stmt = $pdo->prepare('SELECT setting_value FROM settings WHERE setting_key = :setting_key LIMIT 1');
+    $stmt->execute(['setting_key' => $key]);
+    $value = $stmt->fetchColumn();
+
+    return is_string($value) && trim($value) !== '' ? trim($value) : $default;
+}
+
+function site_name(): string
+{
+    return site_setting('website_name', 'Maison Gift Co.');
+}
+
+function absolute_site_url(string $path = ''): string
+{
+    $configuredBaseUrl = getenv('MAISON_SITE_URL');
+    if ($configuredBaseUrl !== false && trim($configuredBaseUrl) !== '') {
+        return rtrim($configuredBaseUrl, '/') . '/' . ltrim($path, '/');
+    }
+
+    $host = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+    if (!preg_match('/^[A-Za-z0-9.-]+(?::\d+)?$/', $host)) {
+        $host = 'localhost';
+    }
+    $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+
+    return ($isHttps ? 'https' : 'http') . '://' . $host . '/' . ltrim(site_url($path), '/');
+}
+
+function whatsapp_url(PDO $pdo, string $message): ?string
+{
+    require_once __DIR__ . '/../config/whatsapp.php';
+    $businessNumber = whatsapp_business_number($pdo);
+
+    if ($businessNumber === '') {
+        return null;
+    }
+
+    return 'https://wa.me/' . $businessNumber . '?text=' . rawurlencode($message);
+}
+
 function product_image_url(?string $path): string
 {
     $path = ltrim((string) $path, '/');

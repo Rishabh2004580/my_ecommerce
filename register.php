@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/config/database.php';
-$pageTitle = 'Create Account | Maison Gift Co.';
+$pageTitle = 'Create Account | ' . site_name();
 $errors = [];
 $values = ['name' => '', 'email' => ''];
 $pdo = get_db_connection();

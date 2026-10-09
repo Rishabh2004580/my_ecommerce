@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_POST['customer_name'] = $customer['name'];
     $_POST['customer_email'] = $customer['email'];
 }
-$pageTitle = 'Checkout | Maison Gift Co.';
+$pageTitle = 'Checkout | ' . site_name();
 require_once __DIR__ . '/includes/header.php';
 ?>
 <section class="page-banner section-spacing"><div class="container"><span class="eyebrow">A thoughtful finish</span><h1>Checkout</h1></div></section>
